@@ -1,0 +1,35 @@
+class MainActivity : AppCompatActivity() {
+    private var adapter: ProductListAdapter? = null
+    private lateinit var viewModel: MainViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        viewModel = ViewModelProviders.of(this@MainActivity).get(MainViewModel(application)::class.java)
+
+        button.setOnClickListener {
+            var product = Product("kalyan",240)
+            viewModel.insertProduct(product)
+
+
+        }
+        observerSetup()
+        recyclerSetup()
+
+    }
+
+    private fun observerSetup() {
+        viewModel.getAllProducts()?.observe(this, Observer { products ->
+
+            products?.let  {
+                adapter?.setProductList(it)
+            }
+        })
+    }
+
+    private fun recyclerSetup() {
+        adapter = ProductListAdapter(R.layout.product_list_item)
+        val recyclerView: RecyclerView? = findViewById(R.id.recyclerView)
+        recyclerView?.layoutManager = LinearLayoutManager(this)
+        recyclerView?.adapter = adapter
+    }
+}

@@ -1,0 +1,17 @@
+@Dao
+interface ProductDao {
+
+    @Insert
+    fun insertProduct(product: Product)
+
+    @Query("Select * FROM products WHERE productName = :name")
+    fun findProduct(name: String): List<Product>
+
+    @Query("delete from products where productName = :name")
+    fun deleteProduct(name: String)
+
+    @Query("Select * from products")
+    fun getAllProducts(): LiveData<List<Product>>
+
+
+}
